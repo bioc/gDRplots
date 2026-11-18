@@ -1,3 +1,6 @@
+## gDRplots 0.99.17 - 2026-11-18
+* add `analyze_cgs_conditions()` to compare two cell line and co-treatment conditions of a chemical genomics screen
+
 ## gDRplots 0.99.16 - 2026-11-17
 * reduce the vignette size by rendering figures at standard resolution
 * document the origin of the test data in `inst/scripts/README.md`

@@ -145,6 +145,113 @@ analyze_cgs <- function(dt_metrics,
   results
 }
 
+#' Compare two screening conditions of a chemical genomics screen and perform GSEA
+#'
+#' Compares the response to each library drug between two conditions, each a cell line at one
+#' co-treatment concentration (\code{0} for the drug alone), and runs GSEA over the drug classes
+#' (\code{drug_moa}). The conditions may use different cell lines and different co-treatment
+#' concentrations, for example a resistant line kept in the anchor drug against its parental line
+#' in standard medium. The difference is \code{condition1} minus \code{condition2}.
+#'
+#' @param dt_metrics A data.table of combination metrics, as for \code{\link{analyze_cgs}}, with
+#'   \code{cotrt_value}.
+#' @param condition1,condition2 Named lists with \code{cell_line} (a value of \code{CellLineName})
+#'   and \code{cotrt_value} (a co-treatment concentration of that cell line, \code{0} for the drug
+#'   alone).
+#' @param metrics A character vector of metrics to compare: "x_mean", "x_AOC_range", "xc50",
+#'   "ec50", "x_max". \code{xc50} is compared on the log10 scale.
+#' @param normalization_type A string, "RV" or "GR".
+#'
+#' @return A list of one element, named \code{"<condition1> vs. <condition2>"}, with \code{fgsea},
+#'   \code{metrics_diff} and \code{moa_list} as returned by \code{\link{analyze_cgs}}, so
+#'   \code{\link{plot_cgs_ranking}} can draw it.
+#' @keywords cgs_plots
+#'
+#' @examples
+#' dt_metrics <- qs2::qs_read(system.file("testdata/cgs_data.qs2", package = "gDRplots"))
+#' analyze_cgs_conditions(dt_metrics,
+#'                        condition1 = list(cell_line = "CellLineName_1", cotrt_value = 1),
+#'                        condition2 = list(cell_line = "CellLineName_2", cotrt_value = 0))
+#'
+#' @export
+analyze_cgs_conditions <- function(dt_metrics,
+                                   condition1,
+                                   condition2,
+                                   metrics = "x_mean",
+                                   normalization_type = "RV") {
+
+  drug_moa <- gDRutils::get_env_identifiers("drug_moa")
+  drug_name <- gDRutils::get_env_identifiers("drug_name")
+  cellline <- gDRutils::get_env_identifiers("cellline_name")
+  norm_col <- gDRutils::get_env_identifiers("normalization_type")
+
+  checkmate::assert_data_table(dt_metrics)
+  checkmate::assert_character(metrics, any.missing = FALSE)
+  checkmate::assert_subset(metrics, choices = c("x_mean", "x_AOC_range", "xc50", "ec50", "x_max"), empty.ok = FALSE)
+  checkmate::assert_true(all(c(metrics, "cotrt_value", cellline, drug_name, drug_moa) %in% names(dt_metrics)))
+  checkmate::assert_choice(normalization_type, choices = c("GR", "RV"))
+  for (cond in list(condition1, condition2)) {
+    checkmate::assert_list(cond, names = "unique")
+    checkmate::assert_names(names(cond), permutation.of = c("cell_line", "cotrt_value"))
+    checkmate::assert_choice(cond$cell_line, choices = as.character(unique(dt_metrics[[cellline]])))
+    checkmate::assert_number(cond$cotrt_value, lower = 0)
+  }
+
+  # computed outside `[` so that the column names do not shadow the arguments
+  keep <- dt_metrics[[norm_col]] == normalization_type &
+    !dt_metrics[[drug_moa]] %in% c("unknown", "Unknown")
+  dt <- dt_metrics[keep]
+  if ("fit_source" %in% names(dt)) {
+    dt <- dt[dt$fit_source == "gDR"]
+  }
+  if ("xc50" %in% metrics) {
+    dt <- dt[is.finite(dt$xc50)]
+    dt$xc50 <- log10(dt$xc50)
+  }
+
+  # mean response per drug in one condition
+  id_cols <- c(drug_name, drug_moa)
+  .condition_metrics <- function(cond) {
+    rows <- dt[[cellline]] == cond$cell_line
+    tol <- sqrt(.Machine$double.eps)
+    sel <- dt[rows & abs(dt$cotrt_value - cond$cotrt_value) < tol]
+    if (NROW(sel) == 0) {
+      stop(sprintf("No %s data for '%s' at co-treatment %s; its co-treatment values are: %s.",
+                   normalization_type, cond$cell_line, cond$cotrt_value,
+                   toString(sort(unique(dt$cotrt_value[rows])))), call. = FALSE)
+    }
+    sel[, lapply(.SD, mean, na.rm = TRUE), by = id_cols, .SDcols = metrics]
+  }
+  .condition_label <- function(cond) {
+    if (cond$cotrt_value == 0) {
+      return(sprintf("%s (single agent)", cond$cell_line))
+    }
+    sprintf("%s (co-treatment %s)", cond$cell_line, cond$cotrt_value)
+  }
+
+  first <- .condition_metrics(condition1)
+  second <- .condition_metrics(condition2)
+  metrics_diff <- merge(first, second, by = id_cols, suffixes = c("_c1", "_c2"))
+  for (m in metrics) {
+    metrics_diff[[m]] <- metrics_diff[[paste0(m, "_c1")]] - metrics_diff[[paste0(m, "_c2")]]
+  }
+  metrics_diff[[norm_col]] <- rep(normalization_type, NROW(metrics_diff))
+
+  moa_list <- lapply(split(metrics_diff[[drug_name]], metrics_diff[[drug_moa]]), unique)
+  moa_list <- moa_list[vapply(moa_list, length, FUN.VALUE = numeric(1)) > 3]
+  in_moa <- metrics_diff[[drug_moa]] %chin% names(moa_list)
+  metrics_diff <- metrics_diff[in_moa]
+
+  unit_name <- paste0(.condition_label(condition1), " vs. ", .condition_label(condition2))
+  list_results <- lapply(metrics, function(metric) {
+    .cgs_fgsea(metrics_diff, metric, moa_list, drug_name, drug_moa, unit_name)
+  })
+  names(list_results) <- metrics
+  results <- list(list(fgsea = list_results, metrics_diff = metrics_diff, moa_list = moa_list))
+  names(results) <- unit_name
+  results
+}
+
 #' Reshape co-treatment differences to one row per drug and co-treatment concentration
 #'
 #' \code{prep_dt_response_metric_diff} returns one difference column per metric and
