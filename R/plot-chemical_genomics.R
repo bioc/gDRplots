@@ -204,8 +204,8 @@ analyze_cgs_conditions <- function(dt_metrics,
   if ("fit_source" %in% names(dt)) {
     dt <- dt[dt$fit_source == "gDR"]
   }
+  # non-finite xc50 values are left out per metric by .cgs_fgsea(), so other metrics keep those drugs
   if ("xc50" %in% metrics) {
-    dt <- dt[is.finite(dt$xc50)]
     dt$xc50 <- log10(dt$xc50)
   }
 

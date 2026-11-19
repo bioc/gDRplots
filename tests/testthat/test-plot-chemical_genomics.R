@@ -152,6 +152,17 @@ test_that("analyze_cgs_conditions compares two conditions of different cell line
   expect_s3_class(plt, "ggplot")
 })
 
+test_that("analyze_cgs_conditions keeps drugs with an infinite xc50 for the other metrics", {
+  cond1 <- list(cell_line = "CellLineName_1", cotrt_value = 1)
+  cond2 <- list(cell_line = "CellLineName_2", cotrt_value = 0)
+  only_mean <- analyze_cgs_conditions(metrics_data, cond1, cond2, metrics = "x_mean")
+  both <- analyze_cgs_conditions(metrics_data, cond1, cond2, metrics = c("x_mean", "xc50"))
+  expect_equal(NROW(both[[1]]$metrics_diff), NROW(only_mean[[1]]$metrics_diff))
+  expect_equal(both[[1]]$metrics_diff$x_mean, only_mean[[1]]$metrics_diff$x_mean)
+  # the infinite xc50 differences are there, and only the finite ones reach the GSEA
+  expect_true(any(!is.finite(both[[1]]$metrics_diff$xc50)))
+})
+
 test_that("analyze_cgs_conditions reports a condition without data", {
   cond1 <- list(cell_line = "CellLineName_1", cotrt_value = 5)
   cond2 <- list(cell_line = "CellLineName_2", cotrt_value = 0)
