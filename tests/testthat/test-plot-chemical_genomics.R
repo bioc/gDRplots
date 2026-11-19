@@ -127,3 +127,47 @@ test_that(".cgs_fgsea leaves out drugs without a finite value", {
                  "GSEA skipped")
   expect_equal(NROW(empty), 0)
 })
+
+test_that("analyze_cgs_conditions compares two conditions of different cell lines and co-treatments", {
+  cond1 <- list(cell_line = "CellLineName_1", cotrt_value = 1)
+  cond2 <- list(cell_line = "CellLineName_2", cotrt_value = 0)
+  res <- analyze_cgs_conditions(metrics_data, cond1, cond2, metrics = c("x_mean", "xc50"))
+
+  expect_equal(names(res), "CellLineName_1 (co-treatment 1) vs. CellLineName_2 (single agent)")
+  expect_named(res[[1]], c("fgsea", "metrics_diff", "moa_list"))
+  expect_named(res[[1]]$fgsea, c("x_mean", "xc50"))
+  expect_s3_class(res[[1]]$fgsea$x_mean, "data.table")
+  expect_type(res[[1]]$fgsea$x_mean$leadingEdge, "character")
+
+  # the difference is condition1 minus condition2, drug by drug
+  d <- res[[1]]$metrics_diff
+  expect_equal(d$x_mean, d$x_mean_c1 - d$x_mean_c2)
+  drug <- d$DrugName[1]
+  rv <- metrics_data[normalization_type == "RV" & fit_source == "gDR" & DrugName == drug]
+  expected <- mean(rv[CellLineName == "CellLineName_1" & cotrt_value == 1, x_mean]) -
+    mean(rv[CellLineName == "CellLineName_2" & cotrt_value == 0, x_mean])
+  expect_equal(d$x_mean[1], expected)
+
+  plt <- plot_cgs_ranking(res, names(res), "x_mean")
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("analyze_cgs_conditions keeps drugs with an infinite xc50 for the other metrics", {
+  cond1 <- list(cell_line = "CellLineName_1", cotrt_value = 1)
+  cond2 <- list(cell_line = "CellLineName_2", cotrt_value = 0)
+  only_mean <- analyze_cgs_conditions(metrics_data, cond1, cond2, metrics = "x_mean")
+  both <- analyze_cgs_conditions(metrics_data, cond1, cond2, metrics = c("x_mean", "xc50"))
+  expect_equal(NROW(both[[1]]$metrics_diff), NROW(only_mean[[1]]$metrics_diff))
+  expect_equal(both[[1]]$metrics_diff$x_mean, only_mean[[1]]$metrics_diff$x_mean)
+  # the infinite xc50 differences are there, and only the finite ones reach the GSEA
+  expect_true(any(!is.finite(both[[1]]$metrics_diff$xc50)))
+})
+
+test_that("analyze_cgs_conditions reports a condition without data", {
+  cond1 <- list(cell_line = "CellLineName_1", cotrt_value = 5)
+  cond2 <- list(cell_line = "CellLineName_2", cotrt_value = 0)
+  expect_error(analyze_cgs_conditions(metrics_data, cond1, cond2), "its co-treatment values are: 0, 1")
+  expect_error(analyze_cgs_conditions(metrics_data, list(cell_line = "nope", cotrt_value = 0), cond2),
+               "Must be element")
+  expect_error(analyze_cgs_conditions(metrics_data, list(cell_line = "CellLineName_1"), cond2), "Names must")
+})
