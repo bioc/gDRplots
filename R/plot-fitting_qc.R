@@ -251,22 +251,22 @@ heatmap_control_mapping_qc <- function(dt_treat,
   cellline_name <- gDRutils::get_env_identifiers("cellline_name")
   drug_name <- gDRutils::get_env_identifiers("drug_name")
   drug_name_2 <- gDRutils::get_env_identifiers("drug_name2")
+  # labels are matched by id; one label per id (the first one if metadata vary within an id)
   if (all(colnames(result_matrix) %in% unique(dt_treat$cId))) {
-    dict <- unique(dt_treat[, .SD, .SDcols = c("cId", cellline_name)])[order(colnames(result_matrix))]
-    colnames(result_matrix) <- dict[[cellline_name]]
+    dict <- unique(dt_treat[, .SD, .SDcols = c("cId", cellline_name)], by = "cId")
+    colnames(result_matrix) <- dict[[cellline_name]][match(colnames(result_matrix), dict$cId)]
   }
   if (all(rownames(result_matrix) %in% unique(dt_treat$rId))) {
     if (drug_name_2 %in% names(dt_treat)) {
       # combo data
-      dict <-
-        unique(dt_treat[, .SD, .SDcols = c("rId", drug_name, drug_name_2)])[order(rownames(result_matrix))]
-      dict$drug_lbl <- paste(dict[[drug_name]], dict[[drug_name_2]], sep = " x ")
-      rownames(result_matrix) <- dict[["drug_lbl"]]
+      dict <- unique(dt_treat[, .SD, .SDcols = c("rId", drug_name, drug_name_2)], by = "rId")
+      drug_lbl <- paste(dict[[drug_name]], dict[[drug_name_2]], sep = " x ")
     } else {
       # single-agent data
-      dict <- unique(dt_treat[, .SD, .SDcols = c("rId", drug_name)])[order(rownames(result_matrix))]
-      rownames(result_matrix) <- dict[[drug_name]]
+      dict <- unique(dt_treat[, .SD, .SDcols = c("rId", drug_name)], by = "rId")
+      drug_lbl <- dict[[drug_name]]
     }
+    rownames(result_matrix) <- drug_lbl[match(rownames(result_matrix), dict$rId)]
   }
 
   # Generate the heatmap

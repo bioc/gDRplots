@@ -35,5 +35,11 @@ Authors:
   \item Dariusz Scigocki
 }
 
+Other contributors:
+\itemize{
+  \item William Colgan (cdsrmodels::lin_associations, adapted in .lin_associations(); see inst/licenses/cdsrmodels-MIT.txt) [copyright holder]
+  \item Andrew Boghossian (cdsrmodels::lin_associations, adapted in .lin_associations(); see inst/licenses/cdsrmodels-MIT.txt) [copyright holder]
+}
+
 }
 \keyword{internal}
