@@ -70,7 +70,7 @@ plot_volcano_assoc <- function(dt_assoc,
                     subtitle = condition_info,
                     x = x_lbl,
                     y = y_lbl) +
-      ggplot2::theme_bw()
+      .theme_bw()
   } else {
     tab_plot <- data.table::setorderv(data.table::copy(dt_assoc), cols = "q_value")
 
@@ -108,7 +108,7 @@ plot_volcano_assoc <- function(dt_assoc,
                     subtitle = condition_info,
                     x = x_lbl,
                     y = y_lbl) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(legend.position = "bottom",
                      legend.title = ggplot2::element_text(vjust = 0.5, hjust = 1))
   }
@@ -185,7 +185,7 @@ plot_scatter_with_corr <- function(dt_response,
                     x = selected_feat,
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw()
+      .theme_bw()
   } else {
     # re-calculate correlation, slope and intercept
     # add label for points driving the correlation
@@ -220,7 +220,7 @@ plot_scatter_with_corr <- function(dt_response,
                     x = selected_feat,
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::guides(color = "none") +
       ggplot2::scale_color_manual(values = c(yes = "red", no = "black"))
   }
@@ -283,7 +283,7 @@ plot_scatter_with_corr_panel <- function(dt_response,
       ggplot2::labs(title = paste0(selected_feat_meta_col, ": all NAs"),
                     x = "",
                     y = selected_metric) +
-      ggplot2::theme_bw()
+      .theme_bw()
   } else {
     available_feats <- setdiff(names(dt_depmap), c("ModelID", "CCLEName"))
     # prep table with data to plot
@@ -380,7 +380,7 @@ plot_scatter_with_corr_panel <- function(dt_response,
                     x = "",
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::guides(color = "none") +
       ggplot2::scale_color_manual(values = c(yes = "red", no = "black", "NA" = "black")) +
       ggplot2::scale_alpha_manual(values = c(yes = 1, no = 1, "NA" = 0)) +
@@ -480,7 +480,7 @@ plot_boxplot_num <- function(dt_response,
                     x = selected_feat,
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw()
+      .theme_bw()
   } else {
     # prep value ranges for y-axis
     range_y <- range(tab_plot[!is.infinite(get(selected_metric)), ][[selected_metric]])
@@ -506,7 +506,7 @@ plot_boxplot_num <- function(dt_response,
                     x = selected_feat,
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::scale_x_discrete(labels = xlbl, drop = FALSE) +
       ggplot2::theme(legend.position = "none",
                      axis.text.x = ggplot2::element_text(size = 8))
@@ -590,7 +590,7 @@ plot_boxplot_num_panel <- function(dt_response,
       ggplot2::labs(title = plt_title,
                     x = "",
                     y = selected_metric) +
-      ggplot2::theme_bw()
+      .theme_bw()
   } else {
     # prep dummy values for x-axis
     ls_lbl <- unique(as.vector(as.matrix(tab_plot[, -c(cellline_name, selected_metric), with = FALSE])))
@@ -685,7 +685,7 @@ plot_boxplot_num_panel <- function(dt_response,
                     x = "",
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::scale_x_discrete(drop = FALSE) +
       ggplot2::facet_wrap(~feat_lbl, scales = "free", ncol = ncol) + # nolint undesirable_function_linter.
       ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8),
@@ -798,7 +798,7 @@ plot_boxplot_meta <- function(dt_response,
       ggplot2::labs(title = paste0(selected_feat_meta_col, ": all NAs"),
                     x = "",
                     y = selected_metric) +
-      ggplot2::theme_bw()
+      .theme_bw()
   } else {
     # remove NA
     tab_plot <- stats::na.omit(tab_plot)
@@ -836,7 +836,7 @@ plot_boxplot_meta <- function(dt_response,
                     x = "",
                     y = selected_metric,
                     caption = unique(dt_response$rId)) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(legend.position = "none",
                      axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust = 1))
 
