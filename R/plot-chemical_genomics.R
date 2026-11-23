@@ -425,7 +425,7 @@ plot_cgs_ranking <- function(results,
                                     the top %d results by p-value are displayed.",
                                     padj_threshold, top_results_no_sig)
                   ) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::geom_hline(yintercept = 0,
                         color = .get_setting("HLINE_COLOR")) +
     ggplot2::geom_hline(yintercept = mean_effect, color = "black") +

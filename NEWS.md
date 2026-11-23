@@ -1,3 +1,6 @@
+## gDRplots 0.99.19 - 2026-11-23
+* reduce plotting time by building `ggplot2::theme_bw()` once per session instead of once per plot
+
 ## gDRplots 0.99.18 - 2026-11-22
 * include the cdsrmodels MIT license and fix the `.lin_associations()` docs (`MHC_direction`, `n.min`, link)
 * fix the labels of `heatmap_control_mapping_qc()`, which were assigned by position instead of by id
@@ -456,4 +459,5 @@
 * update package structure
 * update SA plots and combo plots functions
 * add basic tests
+
 

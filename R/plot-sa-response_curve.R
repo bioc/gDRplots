@@ -278,7 +278,7 @@ plot_dose_response_sa <- function(dt_metrics,
     ggplot2::xlab(bquote(.(conc) ~ "[" ~ mu * M ~ "]")) +
     ggplot2::ylab(normalization_type) +
     ggplot2::ggtitle(plt_title) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),
@@ -600,7 +600,7 @@ plot_dose_response_sa_qc <- function(dt_metrics,
       ggplot2::ylab(normalization_type) +
       ggplot2::ggtitle(plt_title) +
       ggplot2::labs(color = legend_title) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                      axis.text.y = ggplot2::element_text(size = 8),
                      plot.title = ggplot2::element_text(size = 10),
@@ -616,7 +616,7 @@ plot_dose_response_sa_qc <- function(dt_metrics,
       ggplot2::labs(x = bquote(.(conc) ~ "[" ~ mu * M ~ "]"),
                     y = normalization_type,
                     title = cl_name) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(aspect.ratio = 1)
   }
 
@@ -766,7 +766,7 @@ plot_dose_response_sa_qc_panel <- function(dt_metrics,
     ggplot2::ylab(normalization_type) +
     ggplot2::ggtitle(panel_title) +
     ggplot2::labs(color = "") +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),

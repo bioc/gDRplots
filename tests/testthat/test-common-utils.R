@@ -115,3 +115,11 @@ test_that("round_to_unique_string works as expected", {
                                        initial_digits = 0),
                "Assertion on 'initial_digits' failed: Element 1 is not >= 1.")
 })
+
+test_that(".theme_bw builds the theme once and matches ggplot2::theme_bw", {
+  th <- .theme_bw()
+  expect_true(ggplot2::is_theme(th))
+  expect_equal(th, ggplot2::theme_bw())
+  testthat::local_mocked_bindings(theme_bw = function(...) stop("theme rebuilt"), .package = "ggplot2")
+  expect_identical(.theme_bw(), th)
+})

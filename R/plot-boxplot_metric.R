@@ -197,7 +197,7 @@ plot_boxplot_metric_sa <- function(
     ggplot2::labs(title = plt_title,
                   y = get_hm_title(metric, normalization_type),
                   x = "") +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 90, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),
@@ -637,7 +637,7 @@ plot_boxplot_metric_sa_by_grp <- function(
                   x = "",
                   color = sprintf("%s %s", tools::toTitleCase(named_n_mode), named_n),
                   caption = caption_info) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 90, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),
@@ -834,7 +834,7 @@ plot_boxplot_metric_combo <- function(
     ggplot2::labs(title = plt_title,
                   y = get_hm_title(metric, normalization_type),
                   x = "") +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 90, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),
@@ -1255,7 +1255,7 @@ plot_boxplot_metric_combo_by_grp <- function(
                   y = get_hm_title(metric, normalization_type),
                   x = "",
                   color = sprintf("%s %s", tools::toTitleCase(named_n_mode), named_n)) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 90, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),

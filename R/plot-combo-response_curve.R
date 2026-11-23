@@ -147,7 +147,7 @@ plot_dose_response_combo <- function(dt_average,
     ggplot2::ylab(normalization_type) +
     ggplot2::ggtitle(plt_title) +
     ggplot2::labs(color = bquote(.(drug2_name) ~ "[" ~ mu * M ~ "]")) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
       axis.text.y = ggplot2::element_text(size = 8),
@@ -308,7 +308,7 @@ plot_dose_response_combo_panel <- function(dt_average,
     ggplot2::ylab(normalization_type) +
     ggplot2::ggtitle(panel_title) +
     ggplot2::labs(color = bquote(~ "Co-treatment [" ~ mu * M ~ "]")) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1, margin = ggplot2::margin()),
       axis.text.y = ggplot2::element_text(size = 8, margin = ggplot2::margin()),
