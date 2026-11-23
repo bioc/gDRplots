@@ -9,15 +9,17 @@ DESCRIPTION file but ships no LICENSE file and no copyright notice. The text
 below is the standard MIT License. The copyright notice is reconstructed, not
 copied from upstream: the names are the authors listed in the upstream
 DESCRIPTION file, the affiliation is taken from their e-mail addresses and the
-repository owner (broadinstitute), and the years from the repository's commit
-history. It has not been confirmed by the authors.
+repository owner (broadinstitute), and the year from the commit history of
+R/linear_association.R, the file the adapted code comes from. That file also
+has commits from contributors not listed in DESCRIPTION, hence "and other
+cdsrmodels contributors". It has not been confirmed by the authors.
 
 -------------------------------------------------------------------------------
 
 MIT License
 
-Copyright (c) 2020-2022 William Colgan, Andrew Boghossian
-(cdsrmodels authors, Cancer Data Science, Broad Institute)
+Copyright (c) 2020 William Colgan, Andrew Boghossian and other cdsrmodels
+contributors (Cancer Data Science, Broad Institute)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
