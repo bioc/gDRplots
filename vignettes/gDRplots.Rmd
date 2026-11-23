@@ -416,6 +416,16 @@ heatmap_combo_metrics(dt_excess = dt_excess,
                       metric = "bliss_excess")
 ```
 
+HSA excess and Bliss excess differ in the reference response the observed combination is compared with.
+For HSA (highest single agent) the reference is the stronger of the two single agents at the same
+concentrations; for Bliss it is the response expected if the two drugs acted independently.
+Excess is the reference minus the observed value, so positive values (red) mean that the combination
+is stronger than the reference (synergy) and negative values (blue) that it is weaker (antagonism).
+The two maps above look almost the same because in this synthetic dataset the co-drug (`drug_026`)
+has practically no effect on its own (GR close to 1 at all its concentrations).
+When one drug is inactive alone, both references reduce to the response to the other drug, so HSA and
+Bliss excess coincide; they can differ when both drugs are active on their own.
+
 The **plot_combination_index** function allows users to explore the dose-sparing effects for experiments with drug combinations. The Combination Index is displayed at different ratios of the two drugs.
 
 ```{r plot_combination_index, warning = FALSE, message = FALSE}
@@ -493,35 +503,39 @@ The **heatmap_control_mapping_qc** function is dedicated to single-agent, co-dil
 
 It allows to visually check whether the raw data and the control are correct and have been correctly assigned and nothing is missing.
 
+Each cell shows how many control wells have been mapped to a treatment (row) in a cell line (column).
+Treatments without any mapped control are shown in red.
+The first two heatmaps below, for the single-agent and the combination experiment, are uniformly green
+because every treatment in the synthetic data has the same number of controls.
+The third one shows the same combination data after the controls of two cell lines have been removed,
+which is what a mapping problem looks like.
+Metadata are not unified here (`unify_metadata = FALSE`, the default), so each row is labelled by its drug names.
+
 ```{r heatmap_control_mapping_qc, warning = FALSE, message = FALSE}
 dt_treat <-
-  convert_se_assay_to_dt(se_sa,
-                         assay_name = "RawTreated",
-                         unify_metadata = TRUE,
-                         merge_additional_variables = TRUE)
+  convert_se_assay_to_dt(se_sa, assay_name = "RawTreated")
 dt_controls <-
-  convert_se_assay_to_dt(se_sa,
-                         assay_name = "Controls",
-                         unify_metadata = TRUE,
-                         merge_additional_variables = TRUE)
+  convert_se_assay_to_dt(se_sa, assay_name = "Controls")
 
 hm <- heatmap_control_mapping_qc(dt_treat = dt_treat,
                                  dt_controls = dt_controls)
 patchwork::wrap_elements(hm[["gtable"]])
 
 dt_treat <-
-  convert_se_assay_to_dt(se_combo,
-                         assay_name = "RawTreated",
-                         unify_metadata = TRUE,
-                         merge_additional_variables = TRUE)
+  convert_se_assay_to_dt(se_combo, assay_name = "RawTreated")
 dt_controls <-
-  convert_se_assay_to_dt(se_combo,
-                         assay_name = "Controls",
-                         unify_metadata = TRUE,
-                         merge_additional_variables = TRUE)
+  convert_se_assay_to_dt(se_combo, assay_name = "Controls")
 
 hm <- heatmap_control_mapping_qc(dt_treat = dt_treat,
                                  dt_controls = dt_controls)
+patchwork::wrap_elements(hm[["gtable"]])
+
+# simulate missing controls for two cell lines
+cellline_name <- get_env_identifiers("cellline_name")
+dt_controls_missing <-
+  dt_controls[!get(cellline_name) %in% c("cellline_BC", "cellline_JE")]
+hm <- heatmap_control_mapping_qc(dt_treat = dt_treat,
+                                 dt_controls = dt_controls_missing)
 patchwork::wrap_elements(hm[["gtable"]])
 ```
 

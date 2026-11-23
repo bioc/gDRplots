@@ -1,3 +1,8 @@
+## gDRplots 0.99.18 - 2026-11-22
+* include the cdsrmodels MIT license and fix the `.lin_associations()` docs (`MHC_direction`, `n.min`, link)
+* fix the labels of `heatmap_control_mapping_qc()`, which were assigned by position instead of by id
+* document in the vignette how HSA and Bliss excess differ and how to read the control mapping heatmap
+
 ## gDRplots 0.99.17 - 2026-11-18
 * add `analyze_cgs_conditions()` to compare two cell line and co-treatment conditions of a chemical genomics screen
 

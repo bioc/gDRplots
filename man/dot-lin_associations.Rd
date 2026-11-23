@@ -18,16 +18,21 @@
 
 \item{Y}{\code{matrix} or \code{vector} of response variables (rows = samples).}
 
-\item{n.min}{integer; minimum number of finite paired observations required
-to compute a p-value (default 4).}
+\item{n.min}{integer; minimum number of degrees of freedom (finite paired
+observations minus 2) required to compute a p-value (default 4, i.e. at
+least 6 paired observations).}
 
 \item{shrinkage}{logical; apply \code{ashr} shrinkage (default \code{TRUE}).}
 
 \item{alpha}{numeric; \code{ashr} alpha parameter (default 0).}
 
 \item{MHC_direction}{character; \code{"x"} or \code{"y"} — direction of
-multiple-hypothesis correction.  Defaults to \code{"y"} when
-\code{ncol(Y) >= ncol(X)}, otherwise \code{"x"}.}
+multiple-hypothesis correction (Benjamini-Hochberg). With \code{"y"},
+p-values are adjusted across the features of \code{X} separately for each
+column of \code{Y}; with \code{"x"}, across the columns of \code{Y}
+separately for each feature of \code{X}. Defaults to \code{"x"} when
+\code{length(Y) >= length(X)}, otherwise \code{"y"} (same default as
+\code{cdsrmodels::lin_associations}).}
 }
 \value{
 Named list with elements \code{N}, \code{rho}, \code{beta},
@@ -35,10 +40,12 @@ Named list with elements \code{N}, \code{rho}, \code{beta},
   (a \code{data.frame} from \code{ashr}).
 }
 \description{
-Inline reimplementation of \code{lin_associations} from the
-\href{https://github.com/cancerdatasci/cdsrmodels}{cdsrmodels} package
-(MIT License, Broad Institute / DepMap Portal) to remove the GitHub-only
-package dependency is replaced.
+Adapted from \code{lin_associations} in the
+\href{https://github.com/broadinstitute/cdsr_models}{cdsrmodels} package
+(MIT License; authors William Colgan and Andrew Boghossian) to remove
+a GitHub-only package dependency. The license text and copyright notice are
+in \code{inst/licenses/cdsrmodels-MIT.txt}
+(\code{system.file("licenses", "cdsrmodels-MIT.txt", package = "gDRplots")}).
 Uses \code{\link[WGCNA:cor]{WGCNA::cor}} for fast pairwise correlation on large
 matrices and \code{\link[ashr:ash]{ashr::ash}} for empirical-Bayes
 shrinkage of effect sizes.

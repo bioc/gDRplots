@@ -157,6 +157,25 @@ test_that("heatmap_control_mapping_qc works as expected", {
   expect_true(all(vapply(plt_4$gtable$grobs[[2]]$children[[1]]$gp$fill, is_valid_color, logical(1))))
   expect_length(NROW(unique(plt_4$gtable$grobs[[2]]$children[[1]]$gp$fill)), 1)
 
+  # labels are matched by id, not by the row order of dt_treat
+  treat_rev <- treat[rev(seq_len(NROW(treat)))]
+  plt_5 <- heatmap_control_mapping_qc(dt_treat = treat_rev,
+                                      dt_controls = controls)
+  r_ids <- sort(unique(treat$rId))
+  c_ids <- sort(unique(treat$cId))
+  expect_equal(plt_5$gtable$grobs[[4]]$label,
+               paste(rdata[r_ids, "DrugName"], rdata[r_ids, "DrugName_2"], sep = " x "))
+  expect_equal(plt_5$gtable$grobs[[3]]$label, cdata[c_ids, "CellLineName"])
+
+  # metadata unified with record ids give many labels per id: one label per row
+  treat_u <- gDRutils::convert_se_assay_to_dt(se, "RawTreated", unify_metadata = TRUE,
+                                             merge_additional_variables = TRUE)
+  plt_6 <- heatmap_control_mapping_qc(dt_treat = treat_u,
+                                      dt_controls = controls)
+  lbl <- plt_6$gtable$grobs[[4]]$label
+  expect_length(lbl, length(r_ids))
+  expect_true(all(startsWith(lbl, rdata[r_ids, "DrugName"])))
+
 
   expect_error(heatmap_control_mapping_qc(dt_treat = unlist(treat),
                                           dt_controls = controls),

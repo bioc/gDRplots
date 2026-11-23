@@ -30,9 +30,16 @@ Authors:
 \itemize{
   \item Arkadiusz Gladki \email{gladki.arkadiusz@gmail.com} (\href{https://orcid.org/0000-0002-7059-6378}{ORCID})
   \item Marc Hafner (\href{https://orcid.org/0000-0003-1337-7598}{ORCID})
+  \item Luca Gerosa (\href{https://orcid.org/0000-0001-6805-9410}{ORCID})
   \item Janina Smola (\href{https://orcid.org/0009-0007-4347-7748}{ORCID})
   \item Bartosz Czech (\href{https://orcid.org/0000-0002-9908-3007}{ORCID})
   \item Dariusz Scigocki
+}
+
+Other contributors:
+\itemize{
+  \item William Colgan (cdsrmodels::lin_associations, adapted in .lin_associations(); see inst/licenses/cdsrmodels-MIT.txt) [copyright holder]
+  \item Andrew Boghossian (cdsrmodels::lin_associations, adapted in .lin_associations(); see inst/licenses/cdsrmodels-MIT.txt) [copyright holder]
 }
 
 }

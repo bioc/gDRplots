@@ -632,7 +632,7 @@ prep_dt_assoc <- function(dt_response,
   # will be returned in this format when:
   # 1) length (shared lines) < 6
   # 2) all/one of the association calculation inputs will have only NA values
-  # 3) selected_metric values have no variance (due to cdsrmodels::lin_associations)
+  # 3) selected_metric values have no variance (due to .lin_associations, adapted from cdsrmodels)
   # otherwise association will be calculated
   obj_assoc <- list(dt_assoc = data.table::data.table(feature = character(0),
                                                       response = character(0),
