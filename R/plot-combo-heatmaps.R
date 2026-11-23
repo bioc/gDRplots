@@ -221,7 +221,7 @@ heatmap_combo_metrics <- function(
       ggplot2::labs(x = x_axis_lab,
                     y = y_axis_lab,
                     title = plt_title) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(aspect.ratio = 1)
   } else {
     if (scale_type == "smooth") {
@@ -283,7 +283,7 @@ heatmap_combo_metrics <- function(
                                     limit = limit_fill,
                                     labels = function(x) sprintf("%.2f", x),
                                     na.value = "lightgrey") +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                      axis.text.y = ggplot2::element_text(size = 8),
                      plot.title = ggplot2::element_text(size = 10),
@@ -533,7 +533,7 @@ heatmap_combo_metrics_panel <- function(
         ggplot2::labs(x = x_axis_lab,
                       y = y_axis_lab,
                       title = plt_title) +
-        ggplot2::theme_bw() +
+        .theme_bw() +
         ggplot2::theme(aspect.ratio = 1)
     } else {
       dt_[[mx_name]] <- pmin(1.1, dt_[[mx_name]])
@@ -589,7 +589,7 @@ heatmap_combo_metrics_panel <- function(
                                       limit = limits,
                                       labels = function(x) sprintf("%.2f", x),
                                       na.value = "lightgrey") +
-        ggplot2::theme_bw() +
+        .theme_bw() +
         ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                        axis.text.y = ggplot2::element_text(size = 8),
                        plot.title = ggplot2::element_text(size = 10),
@@ -689,7 +689,7 @@ heatmap_combo_metrics_panel <- function(
       ggplot2::labs(y = "CI",
                     x = paste(drug2_name, "/", drug1_name, "ratio"),
                     title = plt_title) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                      axis.text.y = ggplot2::element_text(size = 8),
                      plot.title = ggplot2::element_text(size = 10),
@@ -916,7 +916,7 @@ plot_combination_index <- function(
     ggplot2::labs(y = "CI",
                   x = paste(drug2_name, "/", drug1_name, "ratio"),
                   title = plt_title) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),
@@ -1104,7 +1104,7 @@ heatmap_combo_with_isoref <- function(
       ggplot2::labs(x = x_axis_lab,
                     y = y_axis_lab,
                     title = plt_title) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(aspect.ratio = 1)
   } else {
     dt_[[metric]] <- pmin(1.1, dt_[[metric]])
@@ -1159,7 +1159,7 @@ heatmap_combo_with_isoref <- function(
                                     limit = limits,
                                     labels = function(x) sprintf("%.2f", x),
                                     na.value = "lightgrey") +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                      axis.text.y = ggplot2::element_text(size = 8),
                      plot.title = ggplot2::element_text(size = 10),
@@ -1639,7 +1639,7 @@ heatmap_combo_with_isoref_panel_common <- function(
                                   limit = limits,
                                   labels = function(x) sprintf("%.2f", x),
                                   na.value = "lightgrey") +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8, angle = 45, vjust = 1, hjust = 1),
                    axis.text.y = ggplot2::element_text(size = 8),
                    plot.title = ggplot2::element_text(size = 10),

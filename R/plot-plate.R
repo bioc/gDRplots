@@ -307,7 +307,7 @@ plot_single_plate_stack_info <- function(dt_subset,
       caption = caption_text,
       x = "Column", y = "Row"
     ) +
-    ggplot2::theme_bw() +
+    .theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
                    plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
                    plot.subtitle = ggtext::element_markdown(hjust = 0.5, size = 11),
@@ -421,7 +421,7 @@ plot_plate <- function(dt_plate, column_name) {
         x = "Column",
         y = "Row"
       ) +
-      ggplot2::theme_bw() +
+      .theme_bw() +
       ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
         plot.title = ggplot2::element_text(hjust = 0.5),
