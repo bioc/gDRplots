@@ -1275,7 +1275,7 @@ get_provenance_tables <- function(x) {
   checkmate::assert_list(settings, null.ok = TRUE)
   if (length(settings) == 0L) return("No settings recorded.")
   text <- toString(vapply(names(settings), function(nm) {
-    sprintf("%s = %s", nm, paste(deparse(settings[[nm]], width.cutoff = 60L), collapse = " "))
+    sprintf("%s = %s", nm, deparse1(settings[[nm]], width.cutoff = 60L))
   }, character(1)))
   if (nchar(text) > 300L) text <- paste0(substr(text, 1L, 297L), "...")
   sprintf("Settings: %s.", text)
