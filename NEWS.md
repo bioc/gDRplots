@@ -1,3 +1,6 @@
+## gDRplots 1.1.2 - 2026-11-26
+* use `deparse1()` instead of `paste(deparse())` to satisfy `lintr` 3.4.0
+
 ## gDRplots 1.1.1 - 2026-11-24
 * synchronize Bioconductor and GitHub versioning
 * enable the Bioconductor sync after each merged pull request
